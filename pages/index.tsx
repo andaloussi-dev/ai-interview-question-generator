@@ -31,13 +31,11 @@ export default function Home() {
         prompt,
       }),
     });
-    console.log("Edge function returned.");
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
-    // This data is a ReadableStream
     const data = response.body;
     if (!data) {
       return;
@@ -51,6 +49,8 @@ export default function Home() {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
+      console.log(chunkValue);
+
       setGeneratedQuestions((prev) => prev + chunkValue);
     }
 
@@ -93,10 +93,11 @@ export default function Home() {
                       .split(/(?<=\d\.)\s/)
                       .map((generatedQuestion) => {
                         // remove any number that have a dot after it
-                        const cleandQuestion = generatedQuestion.replace(
-                          /\d\./g,
-                          ""
-                        );
+                        const cleandQuestion = generatedQuestion
+                          .replace(/\d\./g, "")
+                          .replace("}", "");
+                        // remove \n from the string
+                        cleandQuestion.replace(/(\r\n|\n|\r)/gm, "");
                         return (
                           <div
                             className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
