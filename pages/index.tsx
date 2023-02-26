@@ -90,7 +90,7 @@ export default function Home() {
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedQuestions
                       .substring(generatedQuestions.indexOf("1") + 2)
-                      .split(/(?<=\d\.)\s/)
+                      .split(/\d+\.\s/)
                       .map((generatedQuestion) => {
                         // remove any number that have a dot after it
                         const cleandQuestion = generatedQuestion
